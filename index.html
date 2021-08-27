@@ -5,31 +5,55 @@
   <title>Менеджер задач</title>
 </head>
 <body>
-  <div id="app">
-    <div id="todos"></div>
-  </div>
-  <script>
-    const renderTodos = () => {
-      const todosEl = document.getElementById("todos");
-      todosEl.innerHTML = "";
-      for (const todo of todos) {
-        const todoEl = document.createElement("div");
-        todoEl.innerHTML = todo.title;
-        todosEl.appendChild(todoEl);
-      }
-    };
-    
-    const todos = new Proxy([], {
-      set(target, p, value, receiver) {
-        Reflect.set(...arguments);
-        renderTodos();
-        return true;
-      }
+<div id="app">
+  <form onsubmit="return false;">
+    <input id="new-todo" placeholder="Что нужно сделать?"/>
+    <button id="add-todo" onclick="addTodo()">Добавить задание</button>
+  </form>
+  <div id="todos"></div>
+</div>
+<script>
+  let todos = JSON.parse(localStorage.getItem("todos")) || [];
+  todos = new Proxy(todos, {
+    set(target, p, value, receiver) {
+      Reflect.set(...arguments);
+      localStorage.setItem("todos", JSON.stringify(target));
+      renderTodos();
+      return true;
+    }
+  });
+  window.onload = renderTodos;
+  
+  function renderTodos() {
+    const todosEl = document.getElementById("todos");
+    todosEl.innerHTML = "";
+    for (const todo of todos) {
+      const delBtn = document.createElement("button");
+      delBtn.innerHTML = "Delete";
+      delBtn.onclick = () => deleteTodo(todo.id);
+      const todoEl = document.createElement("div");
+      todoEl.innerHTML = todo.title;
+      todoEl.appendChild(delBtn);
+      todosEl.appendChild(todoEl);
+    }
+  }
+  
+  function addTodo() {
+    const newTodoEl = document.getElementById("new-todo");
+    if (!newTodoEl.value.trim()) return;
+    todos.push({
+      id: Date.now(),
+      title: newTodoEl.value
     });
-    
-    setInterval(() => {
-      todos.push({ title: "wow" });
-    }, 1000);
-  </script>
+    newTodoEl.value = "";
+  }
+  
+  function deleteTodo(idToRemove) {
+    const indexToRemove = todos.findIndex(todo => todo.id === idToRemove);
+    if (indexToRemove !== -1) {
+      todos.splice(indexToRemove, 1);
+    }
+  }
+</script>
 </body>
 </html>
