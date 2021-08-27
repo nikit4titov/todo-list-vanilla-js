@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Менеджер задач</title>
+</head>
+<body>
+  <div id="app">
+    <div id="todos"></div>
+  </div>
+  <script>
+    const renderTodos = () => {
+      const todosEl = document.getElementById("todos");
+      todosEl.innerHTML = "";
+      for (const todo of todos) {
+        const todoEl = document.createElement("div");
+        todoEl.innerHTML = todo.title;
+        todosEl.appendChild(todoEl);
+      }
+    };
+    
+    const todos = new Proxy([], {
+      set(target, p, value, receiver) {
+        Reflect.set(...arguments);
+        renderTodos();
+        return true;
+      }
+    });
+    
+    setInterval(() => {
+      todos.push({ title: "wow" });
+    }, 1000);
+  </script>
+</body>
+</html>
