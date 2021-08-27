@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9c38b8a9-bd54-47b6-bf42-a713f2cec316" name="Changes" comment="">
+    <list default="true" id="9c38b8a9-bd54-47b6-bf42-a713f2cec316" name="Changes" comment="adding &amp; deleting todo, saving todos to local storage">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
@@ -45,11 +45,34 @@
       <updated>1630086783489</updated>
       <workItem from="1630086786203" duration="211000" />
       <workItem from="1630087226663" duration="23000" />
-      <workItem from="1630087273880" duration="5123000" />
+      <workItem from="1630087273880" duration="11893000" />
     </task>
+    <task id="LOCAL-00001" summary="adding &amp; deleting todo, saving todos to local storage">
+      <created>1630092612805</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1630092612805</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="adding &amp; deleting todo, saving todos to local storage" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding &amp; deleting todo, saving todos to local storage" />
   </component>
 </project>

@@ -10,10 +10,14 @@
     <input id="new-todo" placeholder="Что нужно сделать?"/>
     <button id="add-todo" onclick="addTodo()">Добавить задание</button>
   </form>
+  <button id="delete-all-todos" onclick="deleteAllTodos()">Удалить все задачи</button>
   <div id="todos"></div>
 </div>
 <script>
   let todos = JSON.parse(localStorage.getItem("todos")) || [];
+  todos.forEach(todo => {
+    todo.editing = false;
+  });
   todos = new Proxy(todos, {
     set(target, p, value, receiver) {
       Reflect.set(...arguments);
@@ -25,33 +29,91 @@
   window.onload = renderTodos;
   
   function renderTodos() {
+    const delAllTodosBtn = document.getElementById("delete-all-todos");
+    if (todos.length < 2) {
+      delAllTodosBtn.style.display = "none";
+    } else {
+      delAllTodosBtn.style.display = "inline-block";
+    }
     const todosEl = document.getElementById("todos");
+    if (todos.length === 0) {
+      todosEl.innerHTML = "Ура! Заданий нет";
+      return;
+    }
     todosEl.innerHTML = "";
     for (const todo of todos) {
+      const editBtn = document.createElement("button");
+      editBtn.innerHTML = "Изменить";
+      editBtn.onclick = () => toggleEditing(todo.id);
+      const saveBtn = document.createElement("button");
+      saveBtn.innerHTML = "Сохранить";
+      saveBtn.onclick = () => {
+        saveTodo(todo.id);
+        toggleEditing(todo.id);
+      }
       const delBtn = document.createElement("button");
-      delBtn.innerHTML = "Delete";
+      delBtn.innerHTML = "Удалить";
       delBtn.onclick = () => deleteTodo(todo.id);
+      const editInput = document.createElement("input");
+      editInput.value = todo.title;
       const todoEl = document.createElement("div");
-      todoEl.innerHTML = todo.title;
+      todoEl.id = todo.id;
+      if (!todo.editing) {
+        todoEl.innerHTML = todo.title;
+        todoEl.appendChild(editBtn);
+      } else {
+        todoEl.appendChild(editInput);
+        todoEl.appendChild(saveBtn);
+      }
       todoEl.appendChild(delBtn);
       todosEl.appendChild(todoEl);
     }
   }
   
   function addTodo() {
-    const newTodoEl = document.getElementById("new-todo");
-    if (!newTodoEl.value.trim()) return;
+    const newTodo = document.getElementById("new-todo");
+    if (!newTodo.value.trim()) return;
     todos.push({
       id: Date.now(),
-      title: newTodoEl.value
+      title: newTodo.value,
+      editing: false,
     });
-    newTodoEl.value = "";
+    newTodo.value = "";
   }
   
-  function deleteTodo(idToRemove) {
-    const indexToRemove = todos.findIndex(todo => todo.id === idToRemove);
-    if (indexToRemove !== -1) {
-      todos.splice(indexToRemove, 1);
+  function deleteTodo(idToDelete) {
+    const index = todos.findIndex(todo => todo.id === idToDelete);
+    if (index !== -1) {
+      todos.splice(index, 1);
+    }
+  }
+  
+  function deleteAllTodos() {
+    todos.splice(0, todos.length);
+  }
+  
+  function saveTodo(idToSave) {
+    const todo = document.getElementById(idToSave);
+    const input = todo.querySelector("input");
+    
+    const index = todos.findIndex(todo => todo.id === idToSave);
+    if (index !== -1) {
+      const todo = todos[index];
+      todos[index] = {
+        ...todo,
+        title: input.value
+      };
+    }
+  }
+  
+  function toggleEditing(idToToggle) {
+    const index = todos.findIndex(todo => todo.id === idToToggle);
+    if (index !== -1) {
+      const todo = todos[index];
+      todos[index] = {
+        ...todo,
+        editing: !todo.editing,
+      };
     }
   }
 </script>
